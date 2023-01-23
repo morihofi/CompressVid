@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">CompressVid</string>
+    <string name="placeholder" translatable="false">Placeholder</string>
+    <string name="videoProfile">Video Profile</string>
+    <string name="quality">Quality</string>
+    <string name="lossless">Lossless</string>
+    <string name="lossy">Worst</string>
+    <string name="btn_next">Next</string>
+    <string name="title_processing">Processing...</string>
+    <string name="status_encoding">Encoding... This may take a moment</string>
+    <string name="action_share">Share</string>
+    <string name="action_tryagain">Try again</string>
+    <string name="msg_encoding_finished_text">Encoding finished!%nFile size: %s</string>
+    <string name="msg_encoding_finished_title">Finished</string>
+    <string name="status_encoding_info" translatable="false">Frame: %s (%s FPS)%nTime: %s (Speed %sx)</string>
+    <string name="action_close">Close</string>
+    <string name="toast_encoding_canceledbyuser">Encoding canceled by user</string>
+    <string name="msg_insufficientpermissions_title">Insufficient Permissions</string>
+    <string name="msg_insufficientpermissions_text">You cannot continue, this app needs to use your storage in order to access your media files</string>
+    <string name="msg_sharevideowith">Share this new encoded Video with ...</string>
+    <string name="ffmpegpreset">FFmpeg Preset</string>
+    <string name="action_showmediainfo">Media Information</string>
+    <string name="msg_mediainfo_title">Media Information</string>
+    <string name="msg_mediainfo_text" translatable="false">Codec: %s%nDuration: %s%n%File-Size: %s</string>
+</resources>

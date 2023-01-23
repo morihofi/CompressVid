@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CompressVid</string>
+    <string name="videoProfile">Videoprofil</string>
+    <string name="quality">Qualität</string>
+    <string name="lossless">Verlustlos</string>
+    <string name="lossy">Verlustreich</string>
+    <string name="btn_next">Weiter</string>
+    <string name="title_processing">Verarbeiten...</string>
+    <string name="status_encoding">Encodiere... Dies kann einen Moment dauern</string>
+    <string name="action_share">Teilen</string>
+    <string name="action_tryagain">Nochmal</string>
+    <string name="msg_encoding_finished_text">Encodieren abgeschlossen!%nDateigröße: %s</string>
+    <string name="msg_encoding_finished_title">Abgeschlossen</string>
+    <string name="action_close">Schließen</string>
+    <string name="toast_encoding_canceledbyuser">Encodierung durch Benutzer abgebrochen</string>
+    <string name="msg_insufficientpermissions_text">Sie können nicht fortfahren, da diese Anwendung Ihren Speicherplatz verwenden muss, um auf Ihre Mediendateien zuzugreifen.</string>
+    <string name="msg_insufficientpermissions_title">Unzureichende Berechtigungen</string>
+    <string name="msg_sharevideowith">Teilen Sie das neu-encodierte Video mit ...</string>
+    <string name="ffmpegpreset">FFmpeg Voreinstellung</string>
+    <string name="action_showmediainfo">Medieninformationen</string>
+    <string name="msg_mediainfo_title">Medieninformationen</string>
+</resources>
