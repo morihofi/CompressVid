@@ -3,6 +3,7 @@ package de.morihofi.compressvid;
 import static android.media.MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT;
 import static com.arthenica.mobileffmpeg.Config.RETURN_CODE_CANCEL;
 import static com.arthenica.mobileffmpeg.Config.RETURN_CODE_SUCCESS;
+import static com.arthenica.mobileffmpeg.Config.getLastCommandOutput;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -254,8 +255,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_activity_main, menu);
         return true;
@@ -264,12 +264,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.men_showmediainfo:
-                AlertDialog alert =  new AlertDialog.Builder(MainActivity.this)
+                AlertDialog alert = new AlertDialog.Builder(MainActivity.this)
                         .setTitle(getString(R.string.msg_mediainfo_title))
-                        .setMessage("Are you sure you want to delete this entry?")
+                        .setMessage(
+                                "Format: " + orgVideoMediaInfo.getFormat() + "\n" +
+                                        "Duration: " + getTime((int) Double.parseDouble(orgVideoMediaInfo.getDuration())) + "\n" +
+                                        "Bitrate: " + FileUtils.byteCountToDisplaySize(Long.parseLong(orgVideoMediaInfo.getBitrate())) + "ps\n" +
+                                        "Stream count: " + orgVideoMediaInfo.getStreams().size()
+                        )
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            dialog.dismiss();
+                        })
                         .show();
+
+
 
                 break;
             default:
@@ -279,23 +289,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1) {// If request is cancelled, the result arrays are empty.
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
 
-                // permission was granted, yay! Do the
-                // contacts-related task you need to do.
-            } else {
-                Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.msg_insufficientpermissions_title), Toast.LENGTH_LONG).show();
-            }
-
-
-        }
-    }
 
 
     @Override
@@ -392,7 +386,6 @@ public class MainActivity extends AppCompatActivity {
             videoView.setVideoURI(videoUri);
             videoView.setMediaController(mc);
             //videoView.start();
-
 
 
             try {
@@ -546,6 +539,8 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
 
+        } else {
+            finish();
         }
 
 
