@@ -270,9 +270,9 @@ public class MainActivity extends AppCompatActivity {
                         .setTitle(getString(R.string.msg_mediainfo_title))
                         .setMessage(
                                 "Format: " + orgVideoMediaInfo.getFormat() + "\n" +
-                                        "Duration: " + getTime((int) Double.parseDouble(orgVideoMediaInfo.getDuration())) + "\n" +
-                                        "Bitrate: " + FileUtils.byteCountToDisplaySize(Long.parseLong(orgVideoMediaInfo.getBitrate())) + "ps\n" +
-                                        "Stream count: " + orgVideoMediaInfo.getStreams().size()
+                                "Duration: " + getTime((int) Double.parseDouble(orgVideoMediaInfo.getDuration())) + "\n" +
+                                "Bitrate: " + FileUtils.byteCountToDisplaySize(Long.parseLong(orgVideoMediaInfo.getBitrate())) + "ps\n" +
+                                "Stream count: " + orgVideoMediaInfo.getStreams().size()
                         )
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                             dialog.dismiss();
