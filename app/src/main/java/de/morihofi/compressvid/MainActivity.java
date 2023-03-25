@@ -32,6 +32,7 @@ import android.widget.Button;
 import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     SeekBar sbQualityCRF;
     Button btnContinue;
     Spinner spFFmpegPreset;
+    TextView tvQualityValue;
 
     MediaInformation orgVideoMediaInfo;
 
@@ -270,15 +272,14 @@ public class MainActivity extends AppCompatActivity {
                         .setTitle(getString(R.string.msg_mediainfo_title))
                         .setMessage(
                                 "Format: " + orgVideoMediaInfo.getFormat() + "\n" +
-                                "Duration: " + getTime((int) Double.parseDouble(orgVideoMediaInfo.getDuration())) + "\n" +
-                                "Bitrate: " + FileUtils.byteCountToDisplaySize(Long.parseLong(orgVideoMediaInfo.getBitrate())) + "ps\n" +
-                                "Stream count: " + orgVideoMediaInfo.getStreams().size()
+                                        "Duration: " + getTime((int) Double.parseDouble(orgVideoMediaInfo.getDuration())) + "\n" +
+                                        "Bitrate: " + FileUtils.byteCountToDisplaySize(Long.parseLong(orgVideoMediaInfo.getBitrate())) + "ps\n" +
+                                        "Stream count: " + orgVideoMediaInfo.getStreams().size()
                         )
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                             dialog.dismiss();
                         })
                         .show();
-
 
 
                 break;
@@ -288,8 +289,6 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
 
 
     @Override
@@ -302,6 +301,11 @@ public class MainActivity extends AppCompatActivity {
         sbQualityCRF = findViewById(R.id.sbQualityCRF);
         btnContinue = findViewById(R.id.btnContinue);
         spFFmpegPreset = findViewById(R.id.spFFmpegPreset);
+        tvQualityValue = findViewById(R.id.tvQualityValue);
+
+        //Show quality value in text view
+        tvQualityValue.setText(String.valueOf(sbQualityCRF.getProgress()));
+
 
         //Clean App cache
         FileUtils.deleteQuietly(getApplicationContext().getCacheDir());
@@ -357,7 +361,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        sbQualityCRF.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                tvQualityValue.setText(String.valueOf(sbQualityCRF.getProgress()));
+            }
 
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
 
 
