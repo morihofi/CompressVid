@@ -20,4 +20,6 @@
     <string name="ffmpegpreset">FFmpeg Voreinstellung</string>
     <string name="action_showmediainfo">Medieninformationen</string>
     <string name="msg_mediainfo_title">Medieninformationen</string>
+    <string name="action_saveingallery">In Galerie speichern</string>
+    <string name="toast_savedingallery">Video wurde in der Galerie im Album \"%s\" gespeichert!</string>
 </resources>

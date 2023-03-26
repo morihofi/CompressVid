@@ -8,17 +8,23 @@ import static com.arthenica.mobileffmpeg.Config.getLastCommandOutput;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -47,6 +53,8 @@ import com.arthenica.mobileffmpeg.StatisticsCallback;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -311,11 +319,11 @@ public class MainActivity extends AppCompatActivity {
         FileUtils.deleteQuietly(getApplicationContext().getCacheDir());
 
         //Ask for read permission
-        int permissionResult = ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
-        if (permissionResult == PackageManager.PERMISSION_DENIED) {
+        int permissionReadResult = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (permissionReadResult == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{
-                            android.Manifest.permission.READ_EXTERNAL_STORAGE
+                            Manifest.permission.READ_EXTERNAL_STORAGE
                     }, 1);
         }
 
@@ -503,6 +511,14 @@ public class MainActivity extends AppCompatActivity {
                                         .setTitle(R.string.msg_encoding_finished_title)
                                         .setMessage(String.format(getString(R.string.msg_encoding_finished_text), humanReadableByteCountSI(finalFileEncFile.length())))
                                         .setCancelable(false)
+                                        .setNeutralButton(R.string.action_saveingallery, (dialog, which) -> {
+                                            try {
+                                                addVideo(finalFileEncFile);
+                                            } catch (IOException e) {
+                                                Toast.makeText(getApplicationContext(),e.getClass().getSimpleName() + ": " + e.getMessage(), Toast.LENGTH_LONG).show();
+
+                                            }
+                                        })
                                         .setPositiveButton(R.string.action_share, (dialog, id) -> {
 
 
@@ -564,4 +580,63 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
+    public void addVideo(File videoFile) throws FileNotFoundException {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // User has not granted access
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    0);
+            return;
+        }
+
+
+        String albumName = "Camera"; //Name of album in gallery (we want to save it in camera folder)
+
+        File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+        String filename = "video_" + System.currentTimeMillis() + "_compressvid.mp4";
+        File dirCompressVidAlbum = new File(directory, albumName);
+
+        //Check if album folder exists, if not, create it
+        if(!dirCompressVidAlbum.exists()){
+            dirCompressVidAlbum.mkdirs();
+        }
+
+        File file = new File(dirCompressVidAlbum, filename);
+
+        // Open a specific media item using InputStream.
+        ContentResolver resolver = getApplicationContext().getContentResolver();
+        FileInputStream inputStream = new FileInputStream(videoFile);
+        try (OutputStream stream = resolver.openOutputStream(Uri.fromFile(file))) {
+            // Perform operations on "stream".
+
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                stream.write(buffer, 0, bytesRead);
+            }
+
+            Log.i("GALLERY_SAVE", "Saved to " + file);
+            Toast.makeText(getApplicationContext(), String.format(getString(R.string.toast_savedingallery), albumName),Toast.LENGTH_LONG).show();
+
+            Log.i("GALLERY_SAVE", "Sending gallery rescan intent, to refresh contents");
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            Uri contentUri = Uri.fromFile(file);
+            mediaScanIntent.setData(contentUri);
+            this.sendBroadcast(mediaScanIntent);
+
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(),e.getClass().getSimpleName() + ": " + e.getMessage(), Toast.LENGTH_LONG).show();
+        } finally {
+            try {
+                inputStream.close();
+            }catch (Exception exception){
+
+            }
+        }
+
+    }
+
 }

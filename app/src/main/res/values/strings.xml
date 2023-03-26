@@ -22,4 +22,6 @@
     <string name="action_showmediainfo">Media Information</string>
     <string name="msg_mediainfo_title">Media Information</string>
     <string name="msg_mediainfo_text" translatable="false">Codec: %s%nDuration: %s%n%File-Size: %s</string>
+    <string name="action_saveingallery">Save in Gallery</string>
+    <string name="toast_savedingallery">Video has saved to gallery in album \"%s\"!</string>
 </resources>
