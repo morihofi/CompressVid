@@ -125,4 +125,14 @@
         app:layout_constraintStart_toEndOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/sbQualityCRF" />
 
+    <Button
+        android:id="@+id/btnReset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/btn_reset"
+        app:icon="@drawable/ic_baseline_refresh_24"
+        app:layout_constraintEnd_toStartOf="@+id/btnContinue"
+        app:layout_constraintTop_toTopOf="@+id/btnContinue" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

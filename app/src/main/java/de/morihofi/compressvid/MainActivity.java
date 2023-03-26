@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnContinue;
     Spinner spFFmpegPreset;
     TextView tvQualityValue;
+    Button btnReset;
 
     MediaInformation orgVideoMediaInfo;
 
@@ -185,16 +186,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public static String[] getValuesOfFFmpegPresetsEnum() {
 
-        ArrayList<String> ret = new ArrayList<>();
-
-        for (FFMPEG_PRESETS preset : FFMPEG_PRESETS.values()) {
-            ret.add(preset.getName());
-        }
-
-        return ret.toArray(new String[0]);
-    }
 
     public enum FFMPEG_PRESETS {
         ultrafast("ultrafast"),
@@ -222,6 +214,29 @@ public class MainActivity extends AppCompatActivity {
                     .findFirst();
         }
 
+        public static String[] getAsList() {
+
+            ArrayList<String> ret = new ArrayList<>();
+            for (FFMPEG_PRESETS preset : FFMPEG_PRESETS.values()) {
+                ret.add(preset.getName());
+            }
+            return ret.toArray(new String[0]);
+        }
+
+        public static int getIndex(FFMPEG_PRESETS preset ){
+            int i = 0;
+            for (String presetName: getAsList()) {
+                if (presetName.equals(preset.getName())){
+
+                    return i;
+                }
+
+                i++;
+            }
+
+            return -1;
+        }
+
 
         public String getName() {
             return preset;
@@ -235,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
     private String video_ffmpeg_preset = "";
 
     private static final String[] profileNames = getValuesOfVideoProfileEnum();
-    private static final String[] ffmpegPresetsNames = getValuesOfFFmpegPresetsEnum();
+    private static final String[] ffmpegPresetsNames = FFMPEG_PRESETS.getAsList();
 
 
     public void loadPresetProfile(VIDEO_PROFILE_NAMES profile) {
@@ -310,6 +325,7 @@ public class MainActivity extends AppCompatActivity {
         btnContinue = findViewById(R.id.btnContinue);
         spFFmpegPreset = findViewById(R.id.spFFmpegPreset);
         tvQualityValue = findViewById(R.id.tvQualityValue);
+        btnReset = findViewById(R.id.btnReset);
 
         //Show quality value in text view
         tvQualityValue.setText(String.valueOf(sbQualityCRF.getProgress()));
@@ -332,11 +348,12 @@ public class MainActivity extends AppCompatActivity {
         profileAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spVideoProfile.setAdapter(profileAdapter);
         profileAdapter.notifyDataSetChanged();
-        loadPresetProfile(VIDEO_PROFILE_NAMES.H264_REENCODE); //Load default preset
 
         ArrayAdapter<String> ffmpegPresetAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, ffmpegPresetsNames);
         profileAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spFFmpegPreset.setAdapter(ffmpegPresetAdapter);
+
+        loadDefaultPreset();
 
         spVideoProfile.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -386,6 +403,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnReset.setOnClickListener(v -> {
+            loadDefaultPreset();
+        });
 
 
 
@@ -578,6 +598,12 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
+
+    }
+
+    private void loadDefaultPreset() {
+        loadPresetProfile(VIDEO_PROFILE_NAMES.H264_REENCODE); //Load default preset ffmpeg profile
+        spFFmpegPreset.setSelection(FFMPEG_PRESETS.getIndex(FFMPEG_PRESETS.medium));
 
     }
 
